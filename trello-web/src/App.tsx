@@ -1,27 +1,21 @@
-import { useMediaQuery } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import {
-  experimental_extendTheme as extendTheme,
-  useColorScheme,
-} from "@mui/material/styles";
+import { useColorScheme } from "@mui/material/styles";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import SettingsBrightnessIcon from "@mui/icons-material/SettingsBrightness";
 import Box from "@mui/system/Box";
-
-type Mode = "light" | "dark" | "system";
+import Container from "@mui/material/Container";
+import { Mode } from "./types/mode";
+import theme from "./theme";
 
 function ModeSelect() {
   const { mode, setMode } = useColorScheme();
 
   const handleChange = (event: SelectChangeEvent) => {
     const selectedMode = event.target.value as Mode;
-    console.log("selectedMode ", selectedMode);
     setMode(selectedMode);
   };
 
@@ -55,39 +49,46 @@ function ModeSelect() {
   );
 }
 
-function ModeToggle() {
-  const { mode, setMode } = useColorScheme();
-
-  // get system theme value
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-  const prefersLightMode = useMediaQuery("(prefers-color-scheme: light)");
-  return (
-    <Button
-      onClick={() => {
-        setMode(mode === "light" ? "dark" : "light");
-      }}
-    >
-      {mode === "light" ? "Turn dark" : "Turn light"}
-    </Button>
-  );
-}
-
-const theme = extendTheme({
-  // ...your custom theme
-});
-
 function App() {
-  return (
-    <>
-      <ModeSelect />
-      <hr />
-      <ModeToggle />
-      <div>Hello world</div>
+  const appBarHeight = theme.trello.appBarHeight;
+  const boardBarHeight = theme.trello.boardBarHeight;
 
-      <Typography variant="body2" color="text.secondary">
-        Test Typo
-      </Typography>
-    </>
+  return (
+    <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
+      <Box
+        sx={{
+          width: "100%",
+          backgroundColor: "primary.light",
+          height: appBarHeight,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <ModeSelect />
+      </Box>
+
+      <Box
+        sx={{
+          width: "100%",
+          backgroundColor: "primary.main",
+          height: boardBarHeight,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        Board Bar
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          height: `calc(100vh - ${boardBarHeight} - ${appBarHeight})`,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        Board Content
+      </Box>
+    </Container>
   );
 }
 
