@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
-import React from "react";
-import theme from "../../../theme";
+import theme from "~/theme";
 
 const BoardContent = () => {
   const boardBarHeight = theme.trello.boardBarHeight;
