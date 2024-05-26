@@ -1,4 +1,4 @@
-import theme from "../../../theme";
+import theme from "~/theme";
 import Box from "@mui/material/Box";
 
 const BoardBar = () => {

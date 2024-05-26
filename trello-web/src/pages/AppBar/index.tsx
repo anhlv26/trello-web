@@ -1,5 +1,5 @@
-import ModeSelect from "../../components/ModeSelect";
-import theme from "../../theme";
+import ModeSelect from "~/components/ModeSelect";
+import theme from "~/theme";
 import Box from "@mui/material/Box";
 
 const AppBar = () => {
