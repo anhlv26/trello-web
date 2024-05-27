@@ -65,11 +65,11 @@ const AppBar = () => {
         />
         <ModeSelect />
         <Tooltip title="Help">
-          <HelpOutlineIcon sx={{ cursor: "pointer" }} />
+          <HelpOutlineIcon sx={{ cursor: "pointer", color: "primary.main" }} />
         </Tooltip>
-        <Tooltip title="Notification">
+        <Tooltip title="Notifications">
           <Badge color="secondary" variant="dot" sx={{ cursor: "pointer" }}>
-            <NotificationsNoneIcon />
+            <NotificationsNoneIcon sx={{ color: "primary.main" }} />
           </Badge>
         </Tooltip>
         <Profiles />
