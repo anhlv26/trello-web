@@ -17,7 +17,7 @@ function ModeSelect() {
   };
 
   return (
-    <FormControl size="small">
+    <FormControl size="small" sx={{ minWidth: 120 }}>
       <InputLabel id="label-select-dark-light-mode">Mode</InputLabel>
       <Select
         labelId="label-select-dark-light-mode"
@@ -25,6 +25,11 @@ function ModeSelect() {
         value={mode}
         label="Mode"
         onChange={handleChange}
+        sx={{
+          "& .MuiSvgIcon-root": {
+              color: "primary.main"
+          }
+      }}
       >
         <MenuItem value="light">
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
