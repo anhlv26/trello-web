@@ -11,17 +11,19 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useColorScheme } from "@mui/material";
 
 const BoardBar = () => {
   const boardBarHeight = theme.trello.boardBarHeight;
+  const currentTheme = useColorScheme();
   const MENU_STYLES = {
-    bgcolor: "white",
-    color: "primary.main",
+    bgcolor: "transparent",
+    color: "white",
     border: "none",
     paddingX: "5px",
     borderRadius: "4px",
     "& .MuiSvgIcon-root": {
-      color: "primary.main",
+      color: "white",
     },
     "&:hover": {
       bgcolor: "primary.50",
@@ -38,7 +40,8 @@ const BoardBar = () => {
         justifyContent: "space-between",
         gap: 2,
         overflowX: "auto",
-        borderTop: "1px solid #00bfa5",
+        borderBottom: "1px solid #00bfa5",
+        bgcolor: currentTheme.colorScheme === "dark" ? "#34495e" : "#1976d2",
       }}
     >
       <Box
@@ -82,16 +85,26 @@ const BoardBar = () => {
       </Box>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Button variant="outlined" startIcon={<GroupAddIcon />}>
+        <Button
+          variant="outlined"
+          sx={{
+            color: "white",
+            border: "1px solid white",
+            "&:hover": { border: "1px solid white" },
+          }}
+          startIcon={<GroupAddIcon />}
+        >
           Invite
         </Button>
         <AvatarGroup
           max={4}
           sx={{
+            gap: "10px",
             "& .MuiAvatar-root": {
               width: 34,
               height: 34,
               fontSize: 16,
+              border: "none",
             },
           }}
         >
