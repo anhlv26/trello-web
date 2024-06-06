@@ -2,8 +2,17 @@ import Box from "@mui/material/Box";
 import Column from "./Column/Column";
 import Button from "@mui/material/Button";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { FC } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "~/reudx/store";
+import { Column as ColumnType} from "~/types/type";
 
-const ListColumns = () => {
+// interface ListColumnsProps {
+//   columns: ColumnType[];
+// }
+
+const ListColumns: FC = () => {
+  const columns = useSelector((state: RootState) => state.board.board.columns);
   return (
     <Box
       sx={{
@@ -16,8 +25,9 @@ const ListColumns = () => {
         // "&::-webkit-scrollbar-track": { m: 2 },
       }}
     >
-      <Column />
-      <Column />
+      {columns.map((column) => (
+        <Column key={column._id} columnId={column._id} />
+      ))}
       <Box
         sx={{
           minWidth: "200px",

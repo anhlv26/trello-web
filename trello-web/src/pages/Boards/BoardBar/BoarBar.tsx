@@ -12,8 +12,18 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useColorScheme } from "@mui/material";
+import { Board } from "~/types/type";
+import { FC } from "react";
+import { capitalizeFirstLetter } from "~/utils/formatter";
+import { useSelector } from "react-redux";
+import { RootState } from "~/reudx/store";
 
-const BoardBar = () => {
+// interface BoardBarProps {
+//   board: Board;
+// }
+
+const BoardBar: FC = () => {
+  const board = useSelector((state: RootState) => state.board.board);
   const boardBarHeight = theme.trello.boardBarHeight;
   const currentTheme = useColorScheme();
   const MENU_STYLES = {
@@ -54,13 +64,13 @@ const BoardBar = () => {
         <Chip
           sx={MENU_STYLES}
           icon={<DashboardIcon />}
-          label="VietanhLe full stack"
+          label={board?.title}
           clickable
         />
         <Chip
           sx={MENU_STYLES}
           icon={<VpnLockIcon />}
-          label="Publish private workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip
@@ -104,9 +114,9 @@ const BoardBar = () => {
               height: 34,
               fontSize: 16,
               border: "none",
-              color:"white",
-              cursor:"pointer",
-              "&:first-of-type":{bgcolor:"#a4b0be"}
+              color: "white",
+              cursor: "pointer",
+              "&:first-of-type": { bgcolor: "#a4b0be" },
             },
           }}
         >

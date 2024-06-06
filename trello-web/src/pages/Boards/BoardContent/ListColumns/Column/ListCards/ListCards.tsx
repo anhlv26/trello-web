@@ -1,8 +1,21 @@
 import theme from "~/theme";
 import Box from "@mui/material/Box";
 import Card from "./Card/Card";
+import { FC } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "~/reudx/store";
 
-const ListCards = () => {
+interface ListCards {
+  columnId: string;
+}
+
+const ListCards: FC<ListCards> = ({ columnId }) => {
+  const cards = useSelector(
+    (state: RootState) =>
+      state.board.board.columns.find((column) => column._id === columnId)
+        ?.cards ?? []
+  );
+
   return (
     <Box
       sx={{
@@ -27,15 +40,9 @@ const ListCards = () => {
         },
       }}
     >
-      <Card />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
-      <Card temporaryHideMedia />
+      {cards.map((card) => (
+        <Card key={card._id} cardId={card._id} />
+      ))}
     </Box>
   );
 };

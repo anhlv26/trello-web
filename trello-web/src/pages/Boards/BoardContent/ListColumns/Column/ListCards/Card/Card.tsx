@@ -7,27 +7,27 @@ import CardMedia from "@mui/material/CardMedia";
 import GroupIcon from "@mui/icons-material/Group";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import CommentIcon from "@mui/icons-material/Comment";
+import { Card as CardType } from "~/types/type";
+import { useSelector } from "react-redux";
+import { RootState } from "~/reudx/store";
 
 interface CardProps {
-  temporaryHideMedia?: boolean;
+  cardId: string;
 }
 
-const Card: React.FC<CardProps> = ({ temporaryHideMedia }) => {
-  if (temporaryHideMedia) {
+const Card: React.FC<CardProps> = ({ cardId }) => {
+  const card = useSelector((state: RootState) =>
+    state.board.board.columns
+      .flatMap((col) => col.cards)
+      .find((card) => card._id === cardId)
+  ) as CardType;
+  const isShowCardAction = () => {
     return (
-      <MuiCard
-        sx={{
-          cursor: "pointer",
-          boxShadow: "0 1px 1px rgba(0, 0, 0, 0.2)",
-          overflow: "unset",
-        }}
-      >
-        <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
-          <Typography>VietanhLe full stack</Typography>
-        </CardContent>
-      </MuiCard>
+      !!card?.memberIds?.length ||
+      !!card?.comments?.length ||
+      !!card?.attachments?.length
     );
-  }
+  };
   return (
     <MuiCard
       sx={{
@@ -36,25 +36,37 @@ const Card: React.FC<CardProps> = ({ temporaryHideMedia }) => {
         overflow: "unset",
       }}
     >
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://img5.thuthuatphanmem.vn/uploads/2021/11/20/hinh-anh-con-than-lan-cute_103235780.jpg"
-        title="green iguana"
-      />
+      {card?.cover && (
+        <CardMedia
+          sx={{ height: 140 }}
+          image={card?.cover}
+          title="green iguana"
+        />
+      )}
+
       <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
-        <Typography>VietanhLe full stack</Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
-      <CardActions sx={{ p: "0 4px 8px 4px" }}>
-        <Button size="small" startIcon={<GroupIcon />}>
-          20
-        </Button>
-        <Button size="small" startIcon={<CommentIcon />}>
-          15
-        </Button>
-        <Button size="small" startIcon={<AttachmentIcon />}>
-          20
-        </Button>
-      </CardActions>
+
+      {isShowCardAction() && (
+        <CardActions sx={{ p: "0 4px 8px 4px" }}>
+          {!!card?.memberIds?.length && (
+            <Button size="small" startIcon={<GroupIcon />}>
+              {card?.memberIds?.length}
+            </Button>
+          )}
+          {!!card?.comments?.length && (
+            <Button size="small" startIcon={<CommentIcon />}>
+              {card?.comments?.length}
+            </Button>
+          )}
+          {!!card?.attachments?.length && (
+            <Button size="small" startIcon={<AttachmentIcon />}>
+              {card?.attachments?.length}
+            </Button>
+          )}
+        </CardActions>
+      )}
     </MuiCard>
   );
 };

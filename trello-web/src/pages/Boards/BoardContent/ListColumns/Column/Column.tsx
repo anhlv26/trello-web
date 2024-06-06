@@ -2,7 +2,7 @@ import { Tooltip, useColorScheme } from "@mui/material";
 import theme from "~/theme";
 import Box from "@mui/material/Box";
 import Menu from "@mui/material/Menu";
-import React from "react";
+import React, { useEffect } from "react";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,14 +17,34 @@ import ContentPaste from "@mui/icons-material/ContentPaste";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCards from "./ListCards/ListCards";
+import { FC } from "react";
+import { Column as ColumnType } from "~/types/type";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "~/reudx/store";
+import { mapOrder } from "~/utils/sort";
+import { setOrderedCards } from "~/reudx/slices/boardSlice";
+interface ColumnProps {
+  columnId: string;
+}
 
-const Column = () => {
+const Column: FC<ColumnProps> = ({ columnId }) => {
+  const dispatch = useAppDispatch();
+  const column = useSelector((state: RootState) =>
+    state.board.board.columns.find((col) => col._id === columnId)
+  ) as ColumnType;
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, "_id");
   const currentTheme = useColorScheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  useEffect(() => {
+    if (column) {
+      dispatch(setOrderedCards({ columnId, cards: orderedCards }));
+    }
+  }, []);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -53,7 +73,7 @@ const Column = () => {
         }}
       >
         <Typography sx={{ fontWeight: "bold", cursor: "pointer" }}>
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Button
@@ -122,12 +142,12 @@ const Column = () => {
       </Box>
 
       {/* box columns list */}
-      <ListCards />
+      <ListCards columnId={column._id} />
 
       {/* box columns footer */}
       <Box
         sx={{
-            height: theme.trello.columnFooterHeight,
+          height: theme.trello.columnFooterHeight,
           p: 2,
           display: "flex",
           alignItems: "center",
