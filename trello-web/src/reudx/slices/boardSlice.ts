@@ -13,7 +13,7 @@ const initialState: BoardState = {
     type: "public", // 'private'
     ownerIds: [], // Những users là Admin của board
     memberIds: [], // Những users là member bình thường của board
-    columnOrderIds: ["column-id-01", "column-id-02", "column-id-03"], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
+    columnOrderIds: ["column-id-03", "column-id-02", "column-id-01"], // Thứ tự sắp xếp / vị trí của các Columns trong 1 boards
     columns: [
       {
         _id: "column-id-01",
@@ -117,7 +117,7 @@ const initialState: BoardState = {
         _id: "column-id-02",
         boardId: "board-id-01",
         title: "Inprogress Column 02",
-        cardOrderIds: ["card-id-10", "card-id-09", "card-id-8"],
+        cardOrderIds: ["card-id-09", "card-id-10", "card-id-08"],
         cards: [
           {
             _id: "card-id-08",
@@ -207,23 +207,8 @@ const boardSlice = createSlice({
       state.board.columns = action.payload;
       state.board.columnOrderIds = action.payload.map((column) => column._id);
     },
-    setOrderedCards(
-      state,
-      action: PayloadAction<{ columnId: string; cards: Card[] }>
-    ) {
-      const { columnId, cards } = action.payload;
-      const columnIndex = state.board.columns.findIndex(
-        (column) => column._id === columnId
-      );
-      if (columnIndex !== -1) {
-        state.board.columns[columnIndex].cards = cards;
-        state.board.columns[columnIndex].cardOrderIds = cards.map(
-          (card) => card._id
-        );
-      }
-    },
   },
 });
 
-export const { setOrderedColumns, setOrderedCards } = boardSlice.actions;
+export const { setOrderedColumns } = boardSlice.actions;
 export default boardSlice.reducer;

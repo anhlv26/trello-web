@@ -20,15 +20,15 @@ import ListCards from "./ListCards/ListCards";
 import { FC } from "react";
 import { Column as ColumnType } from "~/types/type";
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "~/reudx/store";
+import { RootState } from "~/reudx/store";
 import { mapOrder } from "~/utils/sort";
-import { setOrderedCards } from "~/reudx/slices/boardSlice";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 interface ColumnProps {
   columnId: string;
 }
 
 const Column: FC<ColumnProps> = ({ columnId }) => {
-  const dispatch = useAppDispatch();
   const column = useSelector((state: RootState) =>
     state.board.board.columns.find((col) => col._id === columnId)
   ) as ColumnType;
@@ -39,17 +39,23 @@ const Column: FC<ColumnProps> = ({ columnId }) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  useEffect(() => {
-    if (column) {
-      dispatch(setOrderedCards({ columnId, cards: orderedCards }));
-    }
-  }, []);
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: column._id, data: { ...column } });
 
+  const dndKitColumnStyles = {
+    // touchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
   return (
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: "300px",
         maxWidth: "300px",
@@ -142,7 +148,7 @@ const Column: FC<ColumnProps> = ({ columnId }) => {
       </Box>
 
       {/* box columns list */}
-      <ListCards columnId={column._id} />
+      <ListCards cards={orderedCards} />
 
       {/* box columns footer */}
       <Box
