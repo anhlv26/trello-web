@@ -10,6 +10,8 @@ import CommentIcon from "@mui/icons-material/Comment";
 import { Card as CardType } from "~/types/type";
 import { useSelector } from "react-redux";
 import { RootState } from "~/reudx/store";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface CardProps {
   cardId: string;
@@ -28,8 +30,28 @@ const Card: React.FC<CardProps> = ({ cardId }) => {
       !!card?.attachments?.length
     );
   };
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: card._id, data: { ...card } });
+
+  const dndKitCardStyles = {
+    // touchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined,
+  };
   return (
     <MuiCard
+      ref={setNodeRef}
+      style={dndKitCardStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         cursor: "pointer",
         boxShadow: "0 1px 1px rgba(0, 0, 0, 0.2)",
