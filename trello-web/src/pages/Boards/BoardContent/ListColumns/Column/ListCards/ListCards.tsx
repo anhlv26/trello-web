@@ -4,17 +4,14 @@ import Card from "./Card/Card";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "~/reudx/store";
+import { Card as CardType, Column as ColumnType } from "~/types/type";
+
 
 interface ListCards {
-  columnId: string;
+  cards: CardType[];
 }
 
-const ListCards: FC<ListCards> = ({ columnId }) => {
-  const cards = useSelector(
-    (state: RootState) =>
-      state.board.board.columns.find((column) => column._id === columnId)
-        ?.cards ?? []
-  );
+const ListCards: FC<ListCards> = ({ cards }) => {
 
   return (
     <Box
